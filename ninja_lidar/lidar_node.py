@@ -17,8 +17,8 @@ def lidar_callback(msg):
 
 	# Publish the distance data as ROS messages
 	obstacle_distance = min(obstacles) if obstacles else float('inf')  # Minimum distance to closest obstacle
-	obstacle_distance_msg = Float32(data=obstacle_distance)
-	obstacle_distance_pub.publish(obstacle_distance_msg)
+	#obstacle_distance_msg = float(data=obstacle_distance)
+	obstacle_distance_pub.publish(obstacle_distance)
 
 	
 def lidar_node():
