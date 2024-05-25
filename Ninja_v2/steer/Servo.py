@@ -59,6 +59,10 @@ class Servo:
     # Function to set servo angle
     def set_angle(self, angle):
         duty_cycle = ((angle - self.angle_min) / (self.angle_max - self.angle_min)) * (self.duty_cycle_max - self.duty_cycle_min) + self.duty_cycle_min
+        if duty_cycle > 100 :
+        	duty_cycle = 100
+        elif duty_cycle < 0 :
+        	duty_cycle = 0
         self.pwm.change_duty_cycle(duty_cycle)
         
         self.current_angle = angle
