@@ -26,7 +26,7 @@ def control(bot_drive, servo):
     speed = 0
     speed_step = 10
     steering_angle = 0
-    steering_step_size = 3
+    steering_step_size = 10
     
     while True:
         key = readchar.readkey()
@@ -37,7 +37,7 @@ def control(bot_drive, servo):
         
         if key == 'w':
             print("Moved forward")
-            speed = speed_step *2
+            speed = speed_step
             bot_drive.forward(speed)
             
         # elif key == 's':
