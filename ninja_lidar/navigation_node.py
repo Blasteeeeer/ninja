@@ -11,13 +11,13 @@ def map_callback(msg):
     set_start_and_destination(msg)
     
 def set_start_and_destination(map_msg):
-    map_resolution = map_msg_info.resolution
+    map_resolution = map_msg.info.resolution
     map_origin_x = map_msg.info.origin.position.x
     map_origin_y = map_msg.info.origin.position.y
     
     # Update the start position x & y co-ordinates
-    start_x = 1.0
-    start_y = 1.0
+    start_x = map_origin_x
+    start_y = map_origin_y
     start_orientation = 0.0
     
     # Update the destination position x & y co-ordinates
