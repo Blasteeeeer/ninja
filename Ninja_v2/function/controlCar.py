@@ -24,7 +24,7 @@ def show_info():
 def control(bot_drive, servo):
     show_info()
     speed = 0
-    speed_step = 10
+    speed_step = 5
     steering_angle = 0
     steering_step_size = 10
     
