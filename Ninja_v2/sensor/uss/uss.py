@@ -7,10 +7,10 @@ GPIO.setmode(GPIO.BCM)
 class uss:
     def __init__(self):
               
-        self.uss_front = uss_driver(trig=18, echo=23)
-        self.uss_rear  = uss_driver(trig=24, echo=25)
-    #     self.uss_left  = uss_driver(trig=8, echo=7)
-    #     self.uss_right = uss_driver(trig=12, echo=16)
+        self.uss_front = uss_driver(trig=24, echo=25)
+        self.uss_rear  = uss_driver(trig=17, echo=27)
+        self.uss_left  = uss_driver(trig=8, echo=7)
+        self.uss_right = uss_driver(trig=20, echo=16)
 
 
     def getDistance(self,uss_location):
@@ -48,6 +48,8 @@ if __name__ == "__main__":
             print("inside")
             print("Front USS Distance = ", uss.getDistance('front'))
             print("Rear USS Distance = ", uss.getDistance('rear'))
+            print("Left USS Distance = ", uss.getDistance('left'))
+            print("Right USS Distance = ", uss.getDistance('right'))
             sleep(0.5)
             
     except KeyboardInterrupt:
