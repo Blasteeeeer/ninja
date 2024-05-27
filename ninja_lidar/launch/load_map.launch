@@ -1,0 +1,4 @@
+<launch>
+  <!-- Update this path to the correct map file location -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find ninja_lidar)/maps/take_2.yaml" />
+</launch>
