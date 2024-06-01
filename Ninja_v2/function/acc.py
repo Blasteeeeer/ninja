@@ -1,20 +1,23 @@
-import RPi.GPIO as GPIO
 from time import sleep
 
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..')) # including parent directory for importing
 import sensor
 from drive import drive
-from steer import driver
+from steer import Servo
 
 def adaptive_cruise_control(uss, bot_drive):
     acc_safe_distance = 20 #set the desired distance to maintain from the vehicle ahead
-    acc_speed = 50
-    buffer_distance = 5 #tunable
+    acc_speed = 25
+    buffer_distance = 45 #tunable
     delta_speed = 5
     i = 0
 
     while True:
+        
+        #Set steering to straight in every cycle
+        servo.set_SteeringAngle(7)
+        
         print("Driving forward", i)
         i+=1
         front_distance = uss.getDistance('front')
@@ -29,7 +32,7 @@ def adaptive_cruise_control(uss, bot_drive):
         #speed from encoder needs to be read her*****
         bot_speed = bot_drive.get_veh_speed()
         
-        if front_distance > 10:
+        if front_distance > 35:
             #Drive forward
             print("Driving forward")
             if front_distance > (acc_safe_distance+buffer_distance):
@@ -44,6 +47,7 @@ def adaptive_cruise_control(uss, bot_drive):
                 
         else:
              bot_drive.forward(0)
+             sleep(1)
              
         print()     
         sleep(0.1)
@@ -53,7 +57,20 @@ if __name__ == '__main__':
     try:
         uss = sensor.uss.uss()
         bot_drive = drive(1)
+        servo = Servo()
+        
+        #check for green light
+        servo.set_PanAngle(-15)
+        sensor.camera.color_detect_green.main()
+        
+        #green is detected
+        servo.set_PanAngle(25)
+        
+        servo.set_SteeringAngle(0)
+        
+        #run the acc
         adaptive_cruise_control(uss, bot_drive)
+#         print("ACC is running")
     
     except KeyboardInterrupt:
         print("Program end")
@@ -61,4 +78,5 @@ if __name__ == '__main__':
     finally:
         print("finally part")
         del bot_drive
-        GPIO.cleanup()
+        del uss
+        del servo
