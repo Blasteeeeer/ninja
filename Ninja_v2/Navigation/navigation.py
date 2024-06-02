@@ -18,8 +18,8 @@ def create_mask(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # Define the range for blue color in HSV
-    lower_blue = np.array([93, 108, 72])
-    upper_blue = np.array([122, 255, 168])
+    lower_blue = np.array([69, 73, 50])
+    upper_blue = np.array([126, 255, 255])
     blue_mask = cv2.inRange(hsv, lower_blue, upper_blue)
     
     blue_detected = blue_detect(blue_mask)
@@ -128,7 +128,7 @@ def getLaneCurve(imgWarp, curveList = [], display=2):
 
 
 def Find_steer(curveVal):
-    sensitivity = 0.5
+    sensitivity = 0.34 #0.65
             
     steer_angle = curveVal * sensitivity
     
@@ -169,11 +169,11 @@ def main():
     intialTrackBarVals = [0, 195, 0, 240]
     utlis.initializeTrackbars(intialTrackBarVals)
     
-    bot_drive.forward(5)
+    bot_drive.forward(10)
     
     nav_count = 0
     
-    exp_nav_count = 2
+    exp_nav_count = 1
     
     while True:
         # taking frame from camera
@@ -201,11 +201,13 @@ def main():
         #Set steering angle
         servo.set_SteeringAngle(steer_angle)
         
-        
+        avoid_barricade()
         #Check if blue detected with sufficient area
         if blue_detected:
             print("Blue detected")
             
+            
+            servo.set_SteeringAngle(0)
             #Avoid hitting barricade
             avoid_barricade()
             
@@ -221,7 +223,7 @@ def main():
                 #Driving to overcome blue area
                 while bot_drive.get_veh_distance() <= (current_dist + avoid_dist):
                     print('running distance=', bot_drive.get_veh_distance())
-                    bot_drive.forward(5)
+                    bot_drive.forward(10)
                     
                 print('Overcame the blue area')
                 
@@ -229,9 +231,14 @@ def main():
                 #Driving to reach the destination
                 while bot_drive.get_veh_distance() <= (current_dist + nav_dist):
                     print('running distance=', bot_drive.get_veh_distance())
-                    bot_drive.forward(5)
+                    bot_drive.forward(10)
                 print('Reached destination') 
                 bot_drive.forward(0)
+
+                #Stop for 10 secs
+                time.sleep(10)
+
+            bot_drive.forward(10)
         
         k = cv2.waitKey(1) & 0xFF
         # 27 is the ESC key, which means that if you press the ESC key to exit
@@ -257,7 +264,7 @@ if __name__ == "__main__":
         servo.set_PanAngle(20)
         
         #Set steering to straight direction
-        servo.set_SteeringAngle(6)
+        servo.set_SteeringAngle(0)
     
         main()
         
